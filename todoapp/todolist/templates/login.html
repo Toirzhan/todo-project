@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Вход в систему</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+        }
+
+        .login-box {
+            width: 400px;
+            background: white;
+            padding: 35px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .login-title {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .login-title h1 {
+            color: #444;
+        }
+
+        .login-title p {
+            color: gray;
+        }
+
+        .ui.button {
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+<div class="login-box">
+
+    <div class="login-title">
+        <h1>Todo App</h1>
+        <p>Вход в менеджер задач</p>
+    </div>
+
+    <form class="ui form" method="post">
+        {% csrf_token %}
+
+        <div class="field">
+            <label>Имя пользователя</label>
+            <input type="text" name="username" placeholder="Введите логин">
+        </div>
+
+        <div class="field">
+            <label>Пароль</label>
+            <input type="password" name="password" placeholder="Введите пароль">
+        </div>
+
+        <button class="ui blue button" type="submit">
+            Войти
+        </button>
+
+        {% if form.errors %}
+        <div class="ui negative message" style="margin-top:15px;">
+            Неверный логин или пароль.
+        </div>
+        {% endif %}
+    </form>
+
+</div>
+
+</body>
+</html>

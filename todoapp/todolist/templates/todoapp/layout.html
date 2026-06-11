@@ -1,0 +1,45 @@
+<!doctype html>
+{% load static %}
+
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+</head>
+
+<body>
+
+<div class="ui menu">
+    <div class="header item">Todo App</div>
+
+    <div class="right menu">
+
+        {% if user.is_authenticated %}
+            <div class="item">{{ user.username }}</div>
+
+            <div class="item">
+                <a href="{% url 'logout' %}">
+                    <button class="ui red button">Выйти</button>
+                </a>
+            </div>
+
+        {% else %}
+            <div class="item">
+                <a href="{% url 'login' %}">
+                    <button class="ui green button">Войти</button>
+                </a>
+            </div>
+        {% endif %}
+
+    </div>
+</div>
+
+<div class="ui container" style="margin-top: 20px;">
+    {% block content %}
+    {% endblock %}
+</div>
+
+</body>
+</html>

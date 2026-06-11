@@ -1,0 +1,147 @@
+{% extends 'feedback/base.html' %}
+
+{% block title %}Отзывы{% endblock %}
+
+{% block content %}
+
+<div class="container">
+
+    <div class="text-center mb-4">
+        <h1>⭐ Отзывы</h1>
+        <p class="text-muted">Оставьте свой отзыв</p>
+    </div>
+
+    <!-- Список отзывов -->
+    <div id="reviews-list">
+
+        {% for review in reviews %}
+            <div class="card mb-3 p-3 shadow-sm">
+
+                <div class="d-flex justify-content-between">
+                    <b>{{ review.author }}</b>
+
+                    <div class="text-warning">
+                        {% for i in "12345" %}
+                            {% if forloop.counter <= review.rating %}
+                                ★
+                            {% else %}
+                                ☆
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <p>{{ review.text }}</p>
+            </div>
+        {% empty %}
+            <p>Пока нет отзывов</p>
+        {% endfor %}
+
+    </div>
+
+    <hr>
+
+    <!-- Форма -->
+    <div class="card p-4 shadow">
+
+        <h4>Оставить отзыв</h4>
+
+        <form id="reviewForm">
+
+            {% csrf_token %}
+
+            <input type="text" name="author" class="form-control mb-2" placeholder="Ваше имя">
+
+            <!-- ⭐ КЛИКАБЕЛЬНЫЕ ЗВЁЗДЫ -->
+            <div id="star-rating" class="mb-2">
+                <span class="star" data-value="1">☆</span>
+                <span class="star" data-value="2">☆</span>
+                <span class="star" data-value="3">☆</span>
+                <span class="star" data-value="4">☆</span>
+                <span class="star" data-value="5">☆</span>
+            </div>
+
+            <input type="hidden" name="rating" id="rating" value="0">
+
+            <textarea name="text" class="form-control mb-2" placeholder="Отзыв"></textarea>
+
+            <button class="btn btn-success w-100">
+                Отправить ⭐
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+<!-- 🔥 TOAST -->
+<div id="toast" style="
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #28a745;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 10px;
+    display: none;
+">
+    Отзыв отправлен!
+</div>
+
+<!-- JS -->
+<script>
+
+let stars = document.querySelectorAll(".star");
+let ratingInput = document.getElementById("rating");
+
+// ⭐ клик по звёздам
+stars.forEach(star => {
+    star.addEventListener("click", function () {
+        let value = this.dataset.value;
+        ratingInput.value = value;
+
+        stars.forEach(s => {
+            s.innerHTML = s.dataset.value <= value ? "★" : "☆";
+        });
+    });
+});
+
+// ⚡ AJAX отправка формы
+document.getElementById("reviewForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    let formData = new FormData(this);
+
+    fetch("", {
+        method: "POST",
+        body: formData,
+        headers: {
+            "X-Requested-With": "XMLHttpRequest"
+        }
+    })
+    .then(res => location.reload());
+
+});
+
+// 🔔 toast
+function showToast() {
+    let toast = document.getElementById("toast");
+    toast.style.display = "block";
+
+    setTimeout(() => {
+        toast.style.display = "none";
+    }, 2000);
+}
+
+</script>
+
+<style>
+.star {
+    font-size: 30px;
+    cursor: pointer;
+    color: orange;
+}
+</style>
+
+{% endblock %}

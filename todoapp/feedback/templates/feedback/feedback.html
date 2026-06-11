@@ -1,0 +1,15 @@
+{% extends 'feedback/base.html' %}
+
+{% block title %}Обратная связь{% endblock %}
+
+{% block content %}
+
+<h2>Обратная связь</h2>
+
+<form method="post" class="card p-3 shadow-sm">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button class="btn btn-primary">Отправить</button>
+</form>
+
+{% endblock %}
